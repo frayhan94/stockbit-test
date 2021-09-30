@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import { useEffect, useState} from "react";
+import { useEffect, useState, useRef} from "react";
 import '../App.css';
 import Modal from '../component/modal/index';
 import axios from "axios";
@@ -17,6 +17,7 @@ import {
 } from '../reducers/movieSlice';
 function Home() {
 
+    const inputEl = useRef(null);
     const initialFetchType = 'initial';
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
@@ -71,8 +72,7 @@ function Home() {
 
     useEffect(() => {
         getAllMovie(fetchType);
-
-    }, [page]);
+    }, [page, search]);
 
     if(movieLoading) {
         return (
@@ -107,6 +107,7 @@ function Home() {
             }
             <div style={{marginBottom: '30px'}}>
                 <input
+                    ref={inputEl}
                     placeholder={'Search by movie title'}
                     style={{
                         padding: '6px',
@@ -116,15 +117,13 @@ function Home() {
                     }}
                     className={'Search'}
                     type={'text'}
-                    onChange={(e) => {
-                        setSearch(e.target.value)
-                    }}
                 />
                 <input
                     onClick={()=> {
                         /**
                          * Reset search to page 1
                          */
+                        setSearch(inputEl.current.value);
                         setPage(1);
                     }}
                     type={'button'}
