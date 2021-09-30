@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import { useEffect, useState} from "react";
 import '../App.css';
-import Index from '../component/modal/index';
+import Modal from '../component/modal/index';
 import axios from "axios";
 import Error from '../component/error/index';
 import Loading from '../component/loading/index';
@@ -51,7 +51,7 @@ function Home() {
 
         fetchType === initialFetchType ? setLoading(true) : setLoadingMore(true)
 
-        axios.get(`${BASE_URL}/?apikey=${API_KEY}&s=${search}&page=${page}`)
+        axios.get(`${BASE_URL}/?apikey=${API_KEY}&s=${search || 'Batman'}&page=${page}`)
             .then((response)=> {
                 /**
                  * Merge existing with new one
@@ -84,7 +84,7 @@ function Home() {
         <div className="App">
             {
                 modalPoster && (
-                        <Index
+                        <Modal
                             img={modalPoster}
                             onClose={() => {
                                 setModalPoster(null);
@@ -105,6 +105,7 @@ function Home() {
             }
             <div style={{marginBottom: '30px'}}>
                 <input
+                    placeholder={'Search by movie title'}
                     style={{
                         padding: '6px',
                         marginTop: '8px',
