@@ -30,7 +30,7 @@ export const movieSlice = createSlice({
             ]
         },
         getAllMovie: (state, action) => {
-            state.listAllMovies = [...state.listAllMovies, ...action.payload]
+            state.listAllMovies = action.payload;
         },
         getSingleMovie: (state, action) => {
             state.listSingleMovie = {...state.listSingleMovie, ...action.payload}

@@ -58,7 +58,9 @@ function Home() {
                  *
                  * @todo only push to the state if search exist
                  */
-                dispatch(getAllMovieSlice([...allMovie,...response.data.Search]));
+                dispatch(getAllMovieSlice(
+                    page === 1 ? response.data.Search : [...allMovie,...response.data.Search]
+                ));
             })
             .catch((error) => {
                 setError(true);
@@ -120,7 +122,10 @@ function Home() {
                 />
                 <input
                     onClick={()=> {
-                        getAllMovie();
+                        /**
+                         * Reset search to page 1
+                         */
+                        setPage(1);
                     }}
                     type={'button'}
                     value={'Search'}
