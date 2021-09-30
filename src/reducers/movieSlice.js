@@ -6,8 +6,7 @@ export const movieSlice = createSlice({
         listAllMovies: [],
         listSingleMovie:{},
         loading: false,
-        loadingLoadMore: false,
-        count: 0
+        loadingLoadMore: false
     },
     reducers: {
         requestMovie: (state, action) => {
@@ -17,17 +16,6 @@ export const movieSlice = createSlice({
         },
         requestLoadMoreMovie: (state, action) => {
             state.favorites = [...state.favorites, action.payload]
-        },
-        countAllMovie: (state, action) => {
-            state.cartItems = [
-                ...state.cartItems.filter(item => item.id !== action.payload.id),
-                {
-                    id: action.payload.id,
-                    title: action.payload.title,
-                    price: action.payload.price,
-                    quantity: action.payload.quantity
-                }
-            ]
         },
         getAllMovie: (state, action) => {
             state.listAllMovies = action.payload;
@@ -49,7 +37,6 @@ export const movieSlice = createSlice({
 export const {
     requestMovie,
     requestLoadMoreMovie,
-    countAllMovie,
     getAllMovie,
     getSingleMovie,
     setLoading,
@@ -60,6 +47,5 @@ export const selectAllMovie = state => state.movie.listAllMovies
 export const selectSingleMovie = state => state.movie.listSingleMovie
 export const selectLoading = state => state.movie.loading
 export const selectLoadingMore = state => state.movie.loadingLoadMore
-export const selectCount = state => state.movie.count
 
 export default movieSlice.reducer

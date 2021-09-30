@@ -25,8 +25,8 @@ function Home() {
     const [search, setSearch] = useState('Batman');
     const [error, setError] = useState(false);
 
+    const [allowScroll, setAllowScroll] = useState(0);
     const allMovie = useSelector(selectAllMovie);
-    const movieCount = useSelector((state) => state.movie.count);
     const movieLoading = useSelector(selectLoading);
     const movieLoadingLoadMore = useSelector(selectLoadingMore);
 
@@ -37,7 +37,9 @@ function Home() {
         /** Only perform this if total result more than 5 */
         if (
             window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
+            && allowScroll
         ) {
+
             setFetchType('loadMore');
             setPage(page + 1);
         }
@@ -46,14 +48,14 @@ function Home() {
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [page]);
+    }, [page,allowScroll]);
 
     const getAllMovie = (fetchType=initialFetchType) => {
 
         fetchType === initialFetchType ? setLoading(true) : setLoadingMore(true)
 
         axios.get(`${BASE_URL}/?apikey=${API_KEY}&s=${search || 'Batman'}&page=${page}`)
-            .then((response)=> {
+            .then( (response)=> {
                 /**
                  * Merge existing with new one
                  *
@@ -62,6 +64,7 @@ function Home() {
                 dispatch(getAllMovieSlice(
                     page === 1 ? response.data.Search : [...allMovie,...response.data.Search]
                 ));
+                setAllowScroll(Number(response.data.totalResults) > 5);
             })
             .catch((error) => {
                 setError(true);
